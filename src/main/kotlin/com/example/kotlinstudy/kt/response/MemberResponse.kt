@@ -1,4 +1,4 @@
-package com.example.kotlinstudy.kotlin.response
+package com.example.kotlinstudy.kt.response
 
 data class MemberResponse(
     val id: Long,

@@ -1,7 +1,7 @@
-package com.example.kotlinstudy.kotlin
+package com.example.kotlinstudy.kt
 
 
-import com.example.kotlinstudy.kotlin.entity.Member
+import com.example.kotlinstudy.kt.entity.Member
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.junit.jupiter.api.DisplayName

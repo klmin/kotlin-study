@@ -1,4 +1,4 @@
-package com.example.kotlinstudy.kotlin.entity
+package com.example.kotlinstudy.kt.entity
 
 data class Member (
     val id:Long?,

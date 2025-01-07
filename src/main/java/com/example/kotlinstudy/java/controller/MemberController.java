@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/java/test")
-@RestController
-public class JavaMemberController {
+@RestController("javaMemberController")
+public class MemberController {
 
     @PostMapping
     public ResponseEntity<MemberResponse> test(@RequestBody MemberRequest request){
