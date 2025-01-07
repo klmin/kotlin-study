@@ -1,6 +1,6 @@
-package com.example.kotlinstudy;
+package com.example.kotlinstudy.java;
 
-import com.example.kotlinstudy.java.entity.Member1;
+import com.example.kotlinstudy.java.entity.Member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -18,24 +18,24 @@ public class JavaTests {
     @Test
     void 자바_객체_테스트() throws JsonProcessingException {
 
-        var idChangeEntity = Member1.builder()
-                                    .id(200L)
-                                    .name("testName")
-                                    .age(30)
-                                    .build();
+        var idChangeEntity = Member.builder()
+                                   .id(200L)
+                                   .name("testName")
+                                   .age(30)
+                                   .build();
         log.info("idChangeEntity : {}", idChangeEntity);
 
 
         String writeAsString = objectMapper.writeValueAsString(idChangeEntity);
         log.info("writeAsString : {}", writeAsString);
 
-        var readValue = objectMapper.readValue(writeAsString, Member1.class);
+        var readValue = objectMapper.readValue(writeAsString, Member.class);
         log.info("readValue : {}", readValue);
 
-        var convertValue = objectMapper.convertValue(idChangeEntity, Member1.class);
+        var convertValue = objectMapper.convertValue(idChangeEntity, Member.class);
         log.info("convertValue : {}", convertValue);
 
-        var idNameChangeEntity = new Member1(1L, "testName2", 20, null);
+        var idNameChangeEntity = new Member(1L, "testName2", 20, null);
         log.info("idNameChangeEntity : {}", idNameChangeEntity);
 
         var copyAndNameChangeEntity = idNameChangeEntity.toBuilder()
