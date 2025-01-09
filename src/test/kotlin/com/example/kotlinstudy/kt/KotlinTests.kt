@@ -1,15 +1,14 @@
 package com.example.kotlinstudy.kotlin
 
+
 import com.example.kotlinstudy.kotlin.entity.Member
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging
-import lombok.extern.slf4j.Slf4j
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-@Slf4j
 class KotlinTests {
 
     private val objectMapper = jacksonObjectMapper();
@@ -44,4 +43,5 @@ class KotlinTests {
         logger.info { "copyAndAgeChangeEntity : $copyAndAgeChangeEntity" }
 
     }
+
 }

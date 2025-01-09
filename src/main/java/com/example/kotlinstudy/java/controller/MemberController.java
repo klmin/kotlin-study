@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/test")
+@RequestMapping("/java/test")
 @RestController
-public class MemberController {
+public class JavaMemberController {
 
     @PostMapping
     public ResponseEntity<MemberResponse> test(@RequestBody MemberRequest request){
