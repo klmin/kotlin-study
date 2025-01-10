@@ -1,8 +1,8 @@
 package com.example.kotlinstudy.kt.entity
 
-data class Member (
-    val id:Long?,
-    val name:String?,
-    val age:Int?,
-    val description:String?
+class MemberEntity (
+    var id:Long?,
+    var name:String?,
+    var age:Int?,
+    var description:String?
 )
