@@ -1,17 +1,22 @@
 package com.example.kotlinstudy.kt
 
 
+import com.example.kotlinstudy.kt.api.service.ApiService
 import com.example.kotlinstudy.kt.entity.Member
+import com.example.kotlinstudy.kt.entity.MemberData
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class KotlinTests {
+class KotlinTests @Autowired constructor(
+    private val ApiService: ApiService
+){
 
     private val objectMapper = jacksonObjectMapper();
     private val logger = KotlinLogging.logger {}
@@ -25,67 +30,93 @@ class KotlinTests {
         var age : Int = 30
         var description : String? = null
 
-        val idChangeEntity = Member(id=id, name = name, age=age, description = description)
-        Assertions.assertEquals(id, idChangeEntity.id)
-        Assertions.assertEquals(name, idChangeEntity.name)
-        Assertions.assertEquals(age, idChangeEntity.age)
-        Assertions.assertNull(idChangeEntity.description)
+        val memberData = MemberData(id=id, name = name, age=age, description = description)
+        Assertions.assertEquals(id, memberData.id)
+        Assertions.assertEquals(name, memberData.name)
+        Assertions.assertEquals(age, memberData.age)
+        Assertions.assertNull(memberData.description)
 
-        val writeAsString = objectMapper.writeValueAsString(idChangeEntity);
-        Assertions.assertNotNull(writeAsString)
+        val member = Member(id=id, name = name, age=age, description = description)
+        Assertions.assertNotEquals(memberData.hashCode(), member.hashCode())
 
-        val readValueMember = objectMapper.readValue(writeAsString, Member::class.java)
+        val writeAsStringMemberData = objectMapper.writeValueAsString(memberData);
+        Assertions.assertNotNull(writeAsStringMemberData)
 
-        assertThat(idChangeEntity).usingRecursiveComparison().isEqualTo(readValueMember)
+        val writeAsStringMember = objectMapper.writeValueAsString(member);
+        Assertions.assertNotNull(writeAsStringMember)
 
-        val convertValueMember = objectMapper.convertValue(idChangeEntity, Member::class.java)
+        val readValueMemberData = objectMapper.readValue(writeAsStringMemberData, MemberData::class.java)
+        Assertions.assertEquals(memberData.hashCode(), readValueMemberData.hashCode())
+        Assertions.assertEquals(memberData, readValueMemberData)
+        Assertions.assertTrue(memberData == readValueMemberData)
+        Assertions.assertFalse(memberData === readValueMemberData)
+        Assertions.assertNotEquals(System.identityHashCode(memberData), System.identityHashCode(readValueMemberData))
 
-        assertThat(convertValueMember).usingRecursiveComparison().isEqualTo(readValueMember)
+        val readValueMember = objectMapper.readValue(writeAsStringMember, Member::class.java)
+        Assertions.assertNotEquals(member.hashCode(), readValueMember.hashCode())
+        Assertions.assertNotEquals(member, readValueMember)
+        Assertions.assertFalse(member == readValueMember)
+        Assertions.assertFalse(member === readValueMember)
+        Assertions.assertNotEquals(System.identityHashCode(member), System.identityHashCode(readValueMember))
+
+        val convertValueMemberData = objectMapper.convertValue(readValueMemberData, MemberData::class.java)
+        Assertions.assertEquals(readValueMemberData.hashCode(), convertValueMemberData.hashCode())
+        Assertions.assertEquals(readValueMemberData, convertValueMemberData)
+        Assertions.assertTrue(readValueMemberData == convertValueMemberData)
+        Assertions.assertFalse(readValueMemberData === convertValueMemberData)
+        Assertions.assertNotEquals(System.identityHashCode(readValueMemberData), System.identityHashCode(convertValueMemberData))
+
+        val convertValueMember = objectMapper.convertValue(readValueMember, Member::class.java)
+        Assertions.assertNotEquals(readValueMember.hashCode(), convertValueMember.hashCode())
+        Assertions.assertNotEquals(readValueMember, convertValueMember)
+        Assertions.assertFalse(readValueMember == convertValueMember)
+        Assertions.assertFalse(readValueMember === convertValueMember)
+        Assertions.assertNotEquals(System.identityHashCode(readValueMember), System.identityHashCode(convertValueMember))
 
         id = 1
         name = "testName2"
         age = 20
         description = null
 
-        val idNameChangeEntity = Member(id, name, age, description)
+        val idNameAgeChangeMemberDataData = MemberData(id, name, age, description)
 
-        Assertions.assertNotEquals(convertValueMember.id, idNameChangeEntity.id)
-        Assertions.assertNotEquals(convertValueMember.name, idNameChangeEntity.name)
-        Assertions.assertNotEquals(convertValueMember.age, idNameChangeEntity.age)
+        Assertions.assertNotEquals(convertValueMember.id, idNameAgeChangeMemberDataData.id)
+        Assertions.assertNotEquals(convertValueMember.name, idNameAgeChangeMemberDataData.name)
+        Assertions.assertNotEquals(convertValueMember.age, idNameAgeChangeMemberDataData.age)
 
-        Assertions.assertEquals(id, idNameChangeEntity.id)
-        Assertions.assertEquals(name, idNameChangeEntity.name)
-        Assertions.assertEquals(age, idNameChangeEntity.age)
-        Assertions.assertEquals(convertValueMember.description, idNameChangeEntity.description)
+        Assertions.assertEquals(id, idNameAgeChangeMemberDataData.id)
+        Assertions.assertEquals(name, idNameAgeChangeMemberDataData.name)
+        Assertions.assertEquals(age, idNameAgeChangeMemberDataData.age)
+        Assertions.assertEquals(convertValueMember.description, idNameAgeChangeMemberDataData.description)
 
         id = 2
         name = "testName3"
         description = "test_description"
 
-        val copyAndNameChangeEntity = idNameChangeEntity.copy(id=id, name=name, description = description)
-        Assertions.assertNotEquals(idNameChangeEntity.id, copyAndNameChangeEntity.id)
-        Assertions.assertNotEquals(idNameChangeEntity.name, copyAndNameChangeEntity.name)
-        Assertions.assertNotEquals(idNameChangeEntity.description, copyAndNameChangeEntity.description)
+        val copyAndIdNameDescriptionChangeMemberData = idNameAgeChangeMemberDataData.copy(id=id, name=name, description = description)
+        Assertions.assertNotEquals(idNameAgeChangeMemberDataData.id, copyAndIdNameDescriptionChangeMemberData.id)
+        Assertions.assertNotEquals(idNameAgeChangeMemberDataData.name, copyAndIdNameDescriptionChangeMemberData.name)
+        Assertions.assertNotEquals(idNameAgeChangeMemberDataData.description, copyAndIdNameDescriptionChangeMemberData.description)
 
-        Assertions.assertEquals(id, copyAndNameChangeEntity.id)
-        Assertions.assertEquals(name, copyAndNameChangeEntity.name)
-        Assertions.assertEquals(idNameChangeEntity.age, copyAndNameChangeEntity.age)
+        Assertions.assertEquals(id, copyAndIdNameDescriptionChangeMemberData.id)
+        Assertions.assertEquals(name, copyAndIdNameDescriptionChangeMemberData.name)
+        Assertions.assertEquals(idNameAgeChangeMemberDataData.age, copyAndIdNameDescriptionChangeMemberData.age)
 
         id = 3L
-        val copyAndIdChangeEntity = copyAndNameChangeEntity.copy(id=id)
-        Assertions.assertEquals(id, copyAndIdChangeEntity.id)
-        Assertions.assertNotEquals(copyAndNameChangeEntity.id, copyAndIdChangeEntity.id)
-        Assertions.assertEquals(copyAndNameChangeEntity.name, copyAndIdChangeEntity.name)
-        Assertions.assertEquals(copyAndNameChangeEntity.age, copyAndIdChangeEntity.age)
-        Assertions.assertEquals(copyAndNameChangeEntity.description, copyAndIdChangeEntity.description)
+        val copyAndIdChangeMemberData = copyAndIdNameDescriptionChangeMemberData.copy(id=id)
+        Assertions.assertEquals(id, copyAndIdChangeMemberData.id)
+        Assertions.assertNotEquals(copyAndIdNameDescriptionChangeMemberData.id, copyAndIdChangeMemberData.id)
+        Assertions.assertEquals(copyAndIdNameDescriptionChangeMemberData.name, copyAndIdChangeMemberData.name)
+        Assertions.assertEquals(copyAndIdNameDescriptionChangeMemberData.age, copyAndIdChangeMemberData.age)
+        Assertions.assertEquals(copyAndIdNameDescriptionChangeMemberData.description, copyAndIdChangeMemberData.description)
 
         age = 10
-        val copyAndAgeChangeEntity = copyAndIdChangeEntity.copy(age=age)
-        Assertions.assertEquals(copyAndIdChangeEntity.id, copyAndAgeChangeEntity.id)
-        Assertions.assertEquals(copyAndIdChangeEntity.name, copyAndAgeChangeEntity.name)
-        Assertions.assertNotEquals(copyAndIdChangeEntity.age, copyAndAgeChangeEntity.age)
-        Assertions.assertEquals(age, copyAndAgeChangeEntity.age)
-        Assertions.assertEquals(copyAndIdChangeEntity.description, copyAndAgeChangeEntity.description)
+        val copyAndAgeChangeMemberData = copyAndIdChangeMemberData.copy(age=age)
+        Assertions.assertEquals(copyAndIdChangeMemberData.id, copyAndAgeChangeMemberData.id)
+        Assertions.assertEquals(copyAndIdChangeMemberData.name, copyAndAgeChangeMemberData.name)
+        Assertions.assertNotEquals(copyAndIdChangeMemberData.age, copyAndAgeChangeMemberData.age)
+        Assertions.assertEquals(age, copyAndAgeChangeMemberData.age)
+        Assertions.assertEquals(copyAndIdChangeMemberData.description, copyAndAgeChangeMemberData.description)
 
     }
 
@@ -116,5 +147,164 @@ class KotlinTests {
         Assertions.assertEquals(5, str?.length)
 
     }
+
+    @Test
+    fun 엘비스_연산자_테스트(){
+
+        var name: String? = null
+        val replacement = "Default Name"
+        val result = name ?: replacement // ✅ name이 null이면 "Default Name" 반환
+        Assertions.assertEquals(replacement, result)
+
+        var memberData = MemberData(id=1L, name=name, age=10, description=null)
+
+        Assertions.assertEquals("Guest", getUserName(memberData)) // 출력: "Guest"
+
+        name = "test"
+        memberData = memberData.copy(name=name)
+        Assertions.assertEquals(name, getUserName(memberData))
+
+    }
+
+    fun getUserName(user: MemberData?): String {
+        return user?.name ?: "Guest"
+    }
+
+    @Test
+    fun 널_아님_단언_연산자(){
+
+        val name: String? = getValueAndReplacement(null)
+        val result:String = name!!
+        Assertions.assertNotNull(result)
+
+        val memberData = ApiService.getMemberData(1)!!
+        Assertions.assertNotNull(memberData)
+        Assertions.assertThrows(NullPointerException::class.java) { ApiService.getMemberData(null)!! }
+    }
+
+    fun getValueAndReplacement(replacement:String?): String? {
+        return replacement ?: "test"
+    }
+
+    @Nested
+    class 함수형_인터페이스_지원{
+
+        @Test
+        fun 람다_함수() {
+            val square: (Int) -> Int = { x -> x * x }
+            Assertions.assertEquals(25, square(5))
+            val sum = fun(a: Int, b: Int): Int = a + b
+            println(sum);
+        }
+
+        @Test
+        fun 컨슈머() {
+            val consumer: (String) -> Unit = { println(it) }
+
+            consumerTest("Kotlin!", consumer)
+            consumerTest("Kotlin"){ println(it)}
+        }
+
+        fun consumerTest(str:String, consumer: (String) -> Unit) {
+            consumer("Hello $str")
+        }
+
+        @Test
+        fun 서플라이어(){
+            val supplier: () -> String = { "Kotlin!" }
+            Assertions.assertEquals("Hello Kotlin!", supplierTest(supplier))
+            Assertions.assertEquals("Hello Kotlin", supplierTest{"Kotlin"})
+        }
+
+        fun supplierTest(supplier: () -> String): String {
+            return "Hello ${supplier()}"
+        }
+
+        @Test
+        fun stream() {
+
+            // startsWith 판별
+            val names = listOf("Alice", "Bob", "Charlie")
+            val filtered = names.filter { it.startsWith("A") }
+            Assertions.assertEquals(1, filtered.size)
+
+            // uppercase 판별
+            val upperCases = listOf("ALICE", "BOB", "CHARLIE")
+            val upperCaseNames = names.map { it.uppercase() }
+            Assertions.assertEquals(upperCases, upperCaseNames)
+
+            val numbers = listOf(1, 2, 3, 4, 5, 6)
+            val result = numbers.filter{it % 2 == 0}
+                                .map { it * 10 }
+
+            println(result)
+
+            val expected = listOf(20, 40, 60)
+            Assertions.assertEquals(expected, result)
+
+        }
+
+        @Test
+        fun 고차함수(){
+            Assertions.assertEquals(100, applyFunction(10){it * it})
+        }
+
+        private fun applyFunction(x: Int, func: (Int) -> Int): Int {
+            return func(x)
+        }
+
+        @Test
+        fun 인라인함수(){
+            val func = { x: Int -> x * 2 }
+            Assertions.assertEquals(10, applyInlineFunction(5, func))
+        }
+
+        private inline fun applyInlineFunction(x: Int, func: (Int) -> Int): Int {
+            return func(x)
+        }
+
+        @Test
+        fun 기본값(){
+
+            var result = sum(3)
+            Assertions.assertEquals(5, result)
+
+            result = sum(3, 3)
+            Assertions.assertEquals(6, result)
+        }
+
+        private fun sum(a: Int, b: Int = 2) = a + b
+
+        @Test
+        fun 네임드_파라미터(){
+            var result = greet()
+            Assertions.assertEquals("Hello, Guest! Welcome!", result)
+
+            result = greet(name="Lim")
+            Assertions.assertEquals("Hello, Lim! Welcome!", result)
+
+            result = greet(msg="Good Morning!")
+            Assertions.assertEquals("Hello, Guest! Good Morning!", result)
+        }
+
+        private fun greet(name: String = "Guest", msg: String = "Welcome!") = "Hello, $name! $msg"
+
+    }
+
+    @Test
+    fun 확장함수(){
+        val test = "ABCD"
+        println(test.test())
+        println(test.appendHello())
+    }
+
+    fun String.test(): String {
+        return this.substring(1)
+    }
+
+    fun String.appendHello(): String {
+        return "Hello $this"
+    }
+
 
 }

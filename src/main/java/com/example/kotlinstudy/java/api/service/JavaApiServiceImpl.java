@@ -1,12 +1,12 @@
 package com.example.kotlinstudy.java.api.service;
 
-import com.example.kotlinstudy.java.entity.Member;
+import com.example.kotlinstudy.java.entity.MemberRecord;
 import org.springframework.stereotype.Service;
 
-@Service("javaApiService")
-public class ApiServiceImpl implements ApiService {
+@Service
+public class JavaApiServiceImpl implements JavaApiService {
     @Override
-    public Member getMemberData(Long id) {
-        return null;
+    public MemberRecord getMemberData(Long id) {
+        return id == null ? null : new MemberRecord(id, null, null, null);
     }
 }

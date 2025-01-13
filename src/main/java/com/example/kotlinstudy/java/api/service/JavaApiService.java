@@ -1,8 +1,8 @@
 package com.example.kotlinstudy.java.api.service;
 
-import com.example.kotlinstudy.java.entity.Member;
+import com.example.kotlinstudy.java.entity.MemberRecord;
 
-public interface ApiService {
+public interface JavaApiService {
 
-    Member getMemberData(Long id);
+    MemberRecord getMemberData(Long id);
 }

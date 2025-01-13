@@ -1,6 +1,6 @@
 package com.example.kotlinstudy.kt.entity
 
-data class MemberData1 (
+data class MemberData (
     val id:Long?,
     val name:String?,
     val age:Int?,
