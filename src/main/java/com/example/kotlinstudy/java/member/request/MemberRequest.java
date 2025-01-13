@@ -1,4 +1,4 @@
-package com.example.kotlinstudy.java.request;
+package com.example.kotlinstudy.java.member.request;
 
 public record MemberRequest(
 

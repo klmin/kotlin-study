@@ -1,4 +1,4 @@
-package com.example.kotlinstudy.java.entity;
+package com.example.kotlinstudy.java.member.entity;
 
 import lombok.Builder;
 

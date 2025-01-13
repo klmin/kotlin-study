@@ -1,6 +1,6 @@
-package com.example.kotlinstudy.java.api.service;
+package com.example.kotlinstudy.java.member.api.service;
 
-import com.example.kotlinstudy.java.entity.MemberRecord;
+import com.example.kotlinstudy.java.member.entity.MemberRecord;
 import org.springframework.stereotype.Service;
 
 @Service

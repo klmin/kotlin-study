@@ -1,4 +1,4 @@
-package com.example.kotlinstudy.kt.request
+package com.example.kotlinstudy.kt.member.request
 
 data class MemberRequest(
     val id: Long,

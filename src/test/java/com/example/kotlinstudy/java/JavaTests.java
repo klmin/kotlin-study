@@ -1,8 +1,9 @@
 package com.example.kotlinstudy.java;
 
-import com.example.kotlinstudy.java.api.service.JavaApiService;
-import com.example.kotlinstudy.java.entity.Member;
-import com.example.kotlinstudy.java.entity.MemberRecord;
+import com.example.kotlinstudy.java.member.api.service.JavaApiService;
+import com.example.kotlinstudy.java.member.entity.Member;
+import com.example.kotlinstudy.java.member.entity.MemberRecord;
+import com.example.kotlinstudy.java.user.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -259,6 +259,42 @@ public class JavaTests {
             return func.apply(x);
         }
 
+    }
+
+    @Nested
+    class 스코프_함수_지원{
+
+        @Test
+        void let(){
+            String name = "Alice";
+            int nameLength = 0;
+            if (name != null) {
+                System.out.println("Hello, "+name);
+                nameLength = name.length();
+            }
+            Assertions.assertEquals(nameLength, name.length());
+        }
+
+        @Test
+        void apply(){
+
+            Long initId = 1L;
+            String initName = "testName";
+            int initAge = 10;
+
+            String changeName = "changeName";
+            int changeAge = 30;
+
+            User user = new User(initId, initName, initAge);
+            user.setName(changeName);
+            user.setAge(changeAge);
+
+            Assertions.assertEquals(initId, user.getId());
+            Assertions.assertNotEquals(initAge, user.getAge());
+            Assertions.assertEquals(changeAge, user.getAge());
+            Assertions.assertEquals(changeName, user.getName());
+
+        }
     }
 
     @Test

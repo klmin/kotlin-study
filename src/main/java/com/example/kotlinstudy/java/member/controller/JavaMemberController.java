@@ -1,8 +1,8 @@
-package com.example.kotlinstudy.java.controller;
+package com.example.kotlinstudy.java.member.controller;
 
 
-import com.example.kotlinstudy.java.request.MemberRequest;
-import com.example.kotlinstudy.java.response.MemberResponse;
+import com.example.kotlinstudy.java.member.request.MemberRequest;
+import com.example.kotlinstudy.java.member.response.MemberResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

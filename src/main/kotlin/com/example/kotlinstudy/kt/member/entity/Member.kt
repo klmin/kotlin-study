@@ -1,4 +1,4 @@
-package com.example.kotlinstudy.kt.entity
+package com.example.kotlinstudy.kt.member.entity
 
 class Member (
     var id:Long?,

@@ -1,9 +1,10 @@
 package com.example.kotlinstudy.kt
 
 
-import com.example.kotlinstudy.kt.api.service.ApiService
-import com.example.kotlinstudy.kt.entity.Member
-import com.example.kotlinstudy.kt.entity.MemberData
+import com.example.kotlinstudy.kt.member.api.service.ApiService
+import com.example.kotlinstudy.kt.member.entity.Member
+import com.example.kotlinstudy.kt.member.entity.MemberData
+import com.example.kotlinstudy.kt.user.entity.UserData
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.junit.jupiter.api.Assertions
@@ -187,7 +188,7 @@ class KotlinTests @Autowired constructor(
     }
 
     @Nested
-    class 함수형_인터페이스_지원{
+    inner class 함수형_인터페이스_지원{
 
         @Test
         fun 람다_함수() {
@@ -288,6 +289,49 @@ class KotlinTests @Autowired constructor(
         }
 
         private fun greet(name: String = "Guest", msg: String = "Welcome!") = "Hello, $name! $msg"
+
+    }
+
+    @Nested
+    inner class 스코프_함수_지원{
+
+        @Test
+        fun let(){
+
+            val name: String? = "Alice"
+
+            val nameLength = name?.let {
+                println("Hello, $it") // ✅ `name`이 `null`이 아니면 실행
+                it.length
+            }
+            Assertions.assertEquals(5, nameLength)
+
+        }
+
+        @Test
+        fun apply(){
+
+            val initId = 1L
+            val initName = "testName"
+            val initAge = 10
+
+            val changeName = "changeName"
+            val changeAge = 30
+
+            val user = UserData(initId, initName, initAge).apply {
+                println("init : $this")
+                name = "changeName"
+                println("name change : $this")
+            }.apply{
+                age = changeAge
+                println("age change : $this")
+            }
+
+            Assertions.assertEquals(initId, user.id)
+            Assertions.assertNotEquals(initAge, user.age)
+            Assertions.assertEquals(changeAge, user.age)
+            Assertions.assertEquals(changeName, user.name)
+        }
 
     }
 

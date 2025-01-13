@@ -1,4 +1,4 @@
-package com.example.kotlinstudy.java.response;
+package com.example.kotlinstudy.java.member.response;
 
 public record MemberResponse(
 
