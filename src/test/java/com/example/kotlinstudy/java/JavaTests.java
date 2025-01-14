@@ -252,7 +252,8 @@ public class JavaTests {
 
         @Test
         void 고차함수(){
-            Assertions.assertEquals(100, applyFunction(10, x -> x * x));
+            int function = applyFunction(10, x -> x * x);
+            Assertions.assertEquals(100, function);
         }
 
         public int applyFunction(int x, Function<Integer, Integer> func) {
@@ -273,6 +274,7 @@ public class JavaTests {
                 nameLength = name.length();
             }
             Assertions.assertEquals(nameLength, name.length());
+
         }
 
         @Test
@@ -293,6 +295,30 @@ public class JavaTests {
             Assertions.assertNotEquals(initAge, user.getAge());
             Assertions.assertEquals(changeAge, user.getAge());
             Assertions.assertEquals(changeName, user.getName());
+
+        }
+
+        @Test
+        void run(){
+
+            List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6);
+            System.out.println("numbers : "+numbers);
+
+            int numbersSum = numbers.stream().mapToInt(Integer::intValue).sum();
+            System.out.println("numbersSum : "+numbersSum);
+
+            Assertions.assertEquals(21, numbersSum);
+
+        }
+
+        @Test
+        void also(){
+
+        }
+
+        @Test
+        void with(){
+
 
         }
     }

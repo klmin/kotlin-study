@@ -333,6 +333,28 @@ class KotlinTests @Autowired constructor(
             Assertions.assertEquals(changeName, user.name)
         }
 
+        @Test
+        fun run(){
+
+            val numbers = listOf(1, 2, 3, 4, 5, 6)
+            val numbersSum = numbers.run{
+                println("numbers : $numbers")
+                sum()
+            }
+
+            Assertions.assertEquals(21, numbersSum)
+        }
+
+        @Test
+        fun also(){
+
+        }
+
+        @Test
+        fun with(){
+
+        }
+
     }
 
     @Test
