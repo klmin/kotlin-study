@@ -314,18 +314,85 @@ public class JavaTests {
         @Test
         void also(){
 
+            User user = new User(1L, "testName", 20);
+            System.out.println("user : "+user);
+
+            user.setAge(user.getAge() + 1);
+
+            if(user.getAge() < 20){
+                throw new IllegalArgumentException("20세 이상 이어야 합니다.");
+            }
+
+            System.out.println("user : "+user);
+
+            Assertions.assertEquals(21, user.getAge());
         }
 
         @Test
         void with(){
 
+            User user = new User(1L, "testName", 25);
+
+            System.out.println("init user : "+user);
+            user.setAge(user.getAge() + 5);
+            System.out.println("changeAge user : "+user);
+
+            Assertions.assertEquals(30, user.getAge());
+
 
         }
+    }
+
+    public int getLength(Object obj) {
+        if (obj instanceof String) {
+            return ((String) obj).length();
+        }
+        if(obj instanceof Integer){
+            return String.valueOf(obj).length();
+        }
+        return 0;
+
+    }
+
+    public int getLengthJdk16(Object obj) {
+        if (obj instanceof String str) {
+            return str.length();
+        }
+        if(obj instanceof Integer i){
+            return String.valueOf(i).length();
+        }
+        return 0;
+
+    }
+    public int getLengthJdk21(Object obj) {
+        return switch (obj) {
+            case String str -> str.length();
+            case Integer i  -> String.valueOf(i).length();
+            default         -> 0;
+        };
     }
 
     @Test
     void 스마트캐스팅(){
 
+        Object obj = "Alice";
+        Assertions.assertEquals(5, getLength(obj));
+        Assertions.assertEquals(5, getLengthJdk16(obj));
+        Assertions.assertEquals(5, getLengthJdk21(obj));
+        obj = 3;
+        Assertions.assertEquals(1, getLength(obj));
+        Assertions.assertEquals(1, getLengthJdk16(obj));
+        Assertions.assertEquals(1, getLengthJdk21(obj));
+
+    }
+
+    @Test
+    void 타입_추론_및_불변성_제공(){
+        final String name = "Alice";
+        int age = 25;
+
+        // name = "John"; // ❌ 컴파일 오류
+        age = 20; // ✅ 가능
     }
 
 

@@ -348,10 +348,34 @@ class KotlinTests @Autowired constructor(
         @Test
         fun also(){
 
+            val userData = UserData(1L, "testName", 20).also {
+                println("user : $it")
+                it.age++
+            }.also{
+                require(it.age >= 20){
+                    println("20세 이상 이여야 함.")
+                }
+            }.also{
+                println("after : $it")
+            }
+
+            Assertions.assertEquals(21, userData.age)
+
         }
 
         @Test
         fun with(){
+
+            val user = UserData(1L, "testName", 25)
+
+            val age = with(user) {
+                println("Name: $name, Age: $age")
+                age + 5
+            }
+
+            println("age : $age")
+            Assertions.assertEquals(30, age)
+
 
         }
 
@@ -362,6 +386,7 @@ class KotlinTests @Autowired constructor(
         val test = "ABCD"
         println(test.test())
         println(test.appendHello())
+        println(test.greet())
     }
 
     fun String.test(): String {
@@ -370,6 +395,43 @@ class KotlinTests @Autowired constructor(
 
     fun String.appendHello(): String {
         return "Hello $this"
+    }
+
+    fun String.greet() = "Hello, $this"
+
+    fun getLengthIf(obj: Any): Int{
+        if(obj is String){
+            return obj.length
+        }
+        if(obj is Int){
+            return obj.toString().length
+        }
+        return 0
+    }
+
+    fun getLength(obj: Any): Int = when(obj){
+        is String -> obj.length
+        is Int -> obj.toString().length
+        else -> 0
+    }
+
+    @Test
+    fun 스마트캐스팅(){
+        var obj: Any = "Alice"
+        Assertions.assertEquals(5, getLength(obj))
+        Assertions.assertEquals(5, getLengthIf(obj))
+        obj = 1
+        Assertions.assertEquals(1, getLength(obj))
+        Assertions.assertEquals(1, getLengthIf(obj))
+    }
+
+    @Test
+    fun 타입추론_및_불변성_제공(){
+        val name = "Alice"  // 불변 (Immutable)
+        var age = 25        // 가변 (Mutable)
+
+       // name = "John" // ❌ 컴파일 오류
+        age = 20 // ✅ 가능
     }
 
 
