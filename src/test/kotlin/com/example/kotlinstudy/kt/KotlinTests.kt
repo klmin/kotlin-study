@@ -376,7 +376,6 @@ class KotlinTests @Autowired constructor(
             println("age : $age")
             Assertions.assertEquals(30, age)
 
-
         }
 
     }
@@ -387,6 +386,7 @@ class KotlinTests @Autowired constructor(
         println(test.test())
         println(test.appendHello())
         println(test.greet())
+
     }
 
     fun String.test(): String {
@@ -432,6 +432,55 @@ class KotlinTests @Autowired constructor(
 
        // name = "John" // ❌ 컴파일 오류
         age = 20 // ✅ 가능
+    }
+
+    @Test
+    fun for문(){
+
+        // 범위를 활용한 for 문
+        for (i in 0..4) {
+            println("Index: $i")
+        }
+
+        // 리스트를 직접 순회
+        val names = listOf("Alice", "Bob", "Charlie")
+        for (name in names) {
+            println(name)
+        }
+
+        // 인덱스와 함께 요소 접근
+        for ((index, name) in names.withIndex()) {
+            println("Index: $index, Name: $name")
+        }
+
+    }
+
+    @Test
+    fun 구조_분해_할당(){
+
+        // 구조 분해 할당
+        val (first, second, third) = listOf("Alice", "Bob", "Charlie")
+        println(first)  // Alice
+        println(second) // Bob
+        println(third)  // Charlie
+
+        Assertions.assertEquals("Alice", first)
+        Assertions.assertEquals("Bob", second)
+        Assertions.assertEquals("Charlie", third)
+
+        // 🔹 특정 값만 추출 (첫 번째와 세 번째 값 무시)
+        val (_, name, _) = listOf("Alice", "Bob", "Charlie")
+
+        println(name) // Bob
+
+        Assertions.assertEquals("Bob", name)
+
+        val map = mapOf(1 to "One", 2 to "Two")
+
+        for ((key, value) in map) {
+            println("Key: $key, Value: $value")
+        }
+
     }
 
 

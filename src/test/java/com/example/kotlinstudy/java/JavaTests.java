@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -395,5 +396,51 @@ public class JavaTests {
         age = 20; // ✅ 가능
     }
 
+    @Test
+    void for문(){
+
+        // 범위를 활용한 for 문
+        for (int i = 0; i <= 4; i++) {
+            System.out.println("Index: " + i);
+        }
+
+        // 리스트를 직접 순회
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+        for (String name : names) {
+            System.out.println(name);
+        }
+
+        // 인덱스와 함께 요소 접근
+        for (int i = 0; i < names.size(); i++) {
+            System.out.println("Index: " + i + ", Name: " + names.get(i));
+        }
+    }
+
+    @Test
+    void 구조_분해_할당(){
+
+        // 구조 분해 할당은 지원되지 않지만 수동으로 할당 가능
+        List<String> nameList = Arrays.asList("Alice", "Bob", "Charlie");
+        String first = nameList.get(0);
+        String second = nameList.get(1);
+        String third = nameList.get(2);
+
+        System.out.println(first);  // Alice
+        System.out.println(second); // Bob
+        System.out.println(third);  // Charlie
+
+        Assertions.assertEquals("Alice", first);
+        Assertions.assertEquals("Bob", second);
+        Assertions.assertEquals("Charlie", third);
+
+        // Map을 순회 (Map.Entry 사용)
+        Map<Integer, String> map = Map.of(1, "One", 2, "Two");
+
+        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+            Integer key = entry.getKey();
+            String value = entry.getValue();
+            System.out.println("Key: " + key + ", Value: " + value);
+        }
+    }
 
 }
