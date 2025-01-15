@@ -18,6 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -441,6 +445,69 @@ public class JavaTests {
             String value = entry.getValue();
             System.out.println("Key: " + key + ", Value: " + value);
         }
+    }
+
+    @Test
+    void 비동기프래그래밍() throws InterruptedException, ExecutionException {
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        // 비동기 응답
+        System.out.println("## step 1 start ##");
+
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new IllegalStateException(e);
+            }
+            return "Hello from Java!";
+        }).thenAccept(result -> {
+            System.out.println("result : "+result);
+            countDownLatch.countDown();
+        });
+
+        System.out.println("## step 1 end ##");
+
+        //countDownLatch.await();
+
+        System.out.println("## step 2 start ##");
+
+        // 해당 비동기 쓰레드 메인쓰레드에서 응답 대기
+        CompletableFuture<String> result = CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(1); // ✅ 1초 대기
+            } catch (InterruptedException e) {
+                throw new IllegalStateException(e);
+            }
+            return "Hello from Java!";
+        });
+
+        System.out.println("Doing other work...");
+        System.out.println("result : " + result.get()); // ✅ `get()`을 호출하여 동기적으로 결과 받기
+
+        System.out.println("## step 2 end ##");
+
+        // 해당 비동기 쓰레드 메인쓰레드에서 응답 대기
+        System.out.println("## step 3 start ##");
+
+        CompletableFuture<String> fetchDataResult = CompletableFuture.supplyAsync(this::fetchData);
+
+        System.out.println("## step 3 end ##");
+        System.out.println("fetchDataResult : " + fetchDataResult.get()); // ✅ `get()`으로 동기 대기
+
+        // 해당 비동기 쓰레드 비동기 쓰레드에서 응답 대기
+        fetchDataResult.thenAccept(r -> System.out.println("result : "+r));
+
+    }
+
+    public String fetchData() {
+        try {
+            TimeUnit.SECONDS.sleep(1); // ✅ 1초 대기 (비동기 실행)
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
+        return "Fetched Data";
     }
 
 }

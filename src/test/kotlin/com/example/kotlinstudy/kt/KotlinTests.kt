@@ -7,12 +7,16 @@ import com.example.kotlinstudy.kt.member.entity.MemberData
 import com.example.kotlinstudy.kt.user.entity.UserData
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.*
+import kotlinx.coroutines.future.asCompletableFuture
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.web.servlet.function.ServerResponse.async
 
 @SpringBootTest
 class KotlinTests @Autowired constructor(
@@ -481,6 +485,62 @@ class KotlinTests @Autowired constructor(
             println("Key: $key, Value: $value")
         }
 
+        CoroutineScope(Dispatchers.Default).async{
+            fetchData()
+        }
+
+    }
+
+    @Test
+    fun 비동기프로그래밍() = runTest {
+
+        // 비동기 응답
+        println("## step 1 start ##")
+
+        val job = CoroutineScope(Dispatchers.Default).async {
+            delay(1000)
+            "Hello from Kotlin"
+        }
+
+        println("## step 1 end ##")
+
+        job.invokeOnCompletion {
+            println("invokeOnCompletion result : ${job.getCompleted()}") // ✅ `await()` 없이 결과 받기
+        }
+
+        //job.await()
+
+        // async / await
+        println("## step 2 start ##")
+
+        val result = async { // ✅ 비동기 실행
+            delay(1000) // ✅ 논블로킹 방식으로 1초 대기
+            "Hello from Kotlin!"
+        }
+
+        println("Doing other work...") // ✅ 비동기 실행 중 다른 작업 수행
+        println("result : ${result.await()}") // ✅ await()을 사용하여 결과를 기다림
+
+        println("## step 2 end ##")
+
+        // suspend
+        println("## step 3 start ##")
+        val fetchDataResult = CoroutineScope(Dispatchers.Default).async {
+            fetchData()
+        }
+        println("## step 3 end ##")
+        println("fetchDataResult : ${fetchDataResult.await()}") // ✅ await 으로 비동기 응답 대기
+
+        // ✅ 비동기 응답 콜백
+        fetchDataResult.invokeOnCompletion {
+            println("fetchDataResult : ${fetchDataResult.getCompleted()}")
+        }
+
+    }
+
+    suspend fun fetchData(): String { // ✅ suspend 함수
+        delay(1000) // ✅ 논블로킹 대기
+        return "Fetched Data"
     }
 
 
